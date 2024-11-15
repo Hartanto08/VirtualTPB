@@ -130,16 +130,16 @@ app.post("/login", async (req, res) => {
             if (password === storedPassword) {
                 req.session.user = { id: user.id, email: user.email };
                 await saveHistory(user.id, "Login");
-                res.json({ message: "Login successful" });
+                return res.json({ message: "Login successful" });
             } else {
-                res.status(401).json({ error: "Incorrect Password" });
+                return res.status(401).json({ error: "Incorrect Password" });
             }
         } else {
-            res.status(404).json({ error: "User not found" });
+            return res.status(404).json({ error: "User not found" });
         }
     } catch (err) {
         console.error("Error during login:", err);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 });
 
@@ -152,19 +152,29 @@ app.post("/register", async (req, res) => {
     }
 
     try {
+        // Check if the email already exists
         const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
         if (checkResult.rows.length > 0) {
             return res.status(409).json({ error: "Email already exists. Try logging in." });
         } else {
-            await db.query("INSERT INTO users (email, password) VALUES ($1, $2)", [email, password]);
-            // res.redirect("/login");
-            res.status(200).json({ message:"Berhasil terdaftar"});
+            // Insert new user
+            const insertResult = await db.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *", [email, password]);
+            
+            // Check if the insertion was successful by examining the result
+            if (insertResult.rows.length > 0) {
+                console.log("User registered successfully:", insertResult.rows[0]);
+                return res.status(200).json({ message: "Berhasil terdaftar", user: insertResult.rows[0] });
+            } else {
+                console.error("Failed to insert user.");
+                return res.status(500).json({ error: "Failed to register user. Please try again later." });
+            }
         }
     } catch (err) {
         console.error("Error during registration:", err);
-        res.status(500).json({ error: "Internal server error. Please try again later." });
+        return res.status(500).json({ error: "Internal server error. Please try again later." });
     }
 });
+
 
 // app.post("/login", async (req, res) => {
 //     const email = req.body.username;
