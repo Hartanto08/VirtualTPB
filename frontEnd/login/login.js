@@ -14,17 +14,21 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include", // Ensure credentials are sent (e.g., cookies)
             body: JSON.stringify({
                 username,
                 password,
             }),
         });
 
+        console.log("response: ", response)
+
         // Check if the response is OK (status code 2xx)
         if (response.ok) {
             const data = await response.json();
             console.log("Login successful", data);
+            const { token, userId } = data;
+            document.cookie = `token=${token}; path=/; max-age=3600; Secure; SameSite=Strict`;
+            document.cookie = `userId=${userId}; path=/; max-age=3600; Secure; SameSite=Strict`;
             // Redirect to dashboard upon successful login
             window.location.href = "../index.html";
         } else {
