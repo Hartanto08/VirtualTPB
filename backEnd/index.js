@@ -158,6 +158,7 @@ app.post("/register", async (req, res) => {
         } else {
             await db.query("INSERT INTO users (email, password) VALUES ($1, $2)", [email, password]);
             // res.redirect("/login");
+            res.status(200).json({ message:"Berhasil terdaftar"});
         }
     } catch (err) {
         console.error("Error during registration:", err);

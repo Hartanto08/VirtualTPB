@@ -14,7 +14,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
             },
             body: JSON.stringify({ username, password }),  // Send form data as JSON
         });
-
+        console.log(response)
         if (response.ok) {
             const data = await response.json();
             console.log('Registration successful:', data);
