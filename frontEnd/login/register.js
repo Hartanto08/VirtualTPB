@@ -7,7 +7,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
     // Send the data via fetch to the backend
     try {
-        const response = await fetch('https://virtual-tpb.vercel.app/register', {
+        const response = await fetch(`${CONFIG.BASE_URL}/register`, {
             method: 'POST',  // The method for form submission
             headers: {
                 'Content-Type': 'application/json',  // Make sure the backend expects JSON
@@ -19,7 +19,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
             const data = await response.json();
             console.log('Registration successful:', data);
             // You can redirect or show a success message
-            window.location.href = 'https://virtual-tpb-zb9j.vercel.app/login';  // Example redirect to login page
+            window.location.href = "./login.html";  // Example redirect to login page
         } else {
             const error = await response.json();
             alert(`Error: ${error.message || 'Registration failed'}`);

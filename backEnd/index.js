@@ -157,7 +157,7 @@ app.post("/register", async (req, res) => {
             return res.status(409).json({ error: "Email already exists. Try logging in." });
         } else {
             await db.query("INSERT INTO users (email, password) VALUES ($1, $2)", [email, password]);
-            res.redirect("/login");
+            // res.redirect("/login");
         }
     } catch (err) {
         console.error("Error during registration:", err);
