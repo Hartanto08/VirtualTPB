@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const token = getCookie("token");
             if (!token) {
                 console.error("User not logged in, no token found.");
+                window.location.href = "../login/login.html"
                 return;
             }
 
@@ -73,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
             userInfoText.textContent = `Username : ${data.username}`;
         } catch (error) {
             console.error("Error fetching user data:", error);
+            window.location.href = "../index.html";
         }
     }
 
@@ -145,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 // Arahkan pengguna kembali ke halaman login setelah log out
-                window.location.href = `${CONFIG.BASE_URL}/login`; // Sesuaikan dengan URL login Anda
+                window.location.href = "../login/login.html"; // Sesuaikan dengan URL login Anda
             
         } catch (error) {
             console.error("Error logging out:", error);

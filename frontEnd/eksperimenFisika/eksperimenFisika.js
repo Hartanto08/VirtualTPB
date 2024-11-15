@@ -42,24 +42,27 @@ document.body.addEventListener("click", async (event) => {
         const actionDescription = event.target.getAttribute("data-description") || "Aksi tanpa deskripsi";
 
         const token = getCookie("token");
-
-        try {
-            const response = await fetch(`${CONFIG.BASE_URL}/log-action`, { // Gunakan CONFIG.BASE_URL
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` 
-                },
-                body: JSON.stringify({ action: actionDescription })
-            });
-
-            if (response.ok) {
-                console.log("Action logged successfully");
-            } else {
-                console.error("Failed to log action");
+        if(token)
+        {
+            try {
+                const response = await fetch(`${CONFIG.BASE_URL}/log-action`, { // Gunakan CONFIG.BASE_URL
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ action: actionDescription })
+                });
+    
+                if (response.ok) {
+                    console.log("Action logged successfully");
+                } else {
+                    console.error("Failed to log action");
+                    }
+                
+            } catch (error) {
+                console.error("Error logging action:", error);
             }
-        } catch (error) {
-            console.error("Error logging action:", error);
         }
     }
 });
@@ -238,31 +241,42 @@ function stopMusic() {
 
 // Fungsi untuk menyimpan hasil permainan
 async function saveGameResult(result, distance) {
-    try {
-        const response = await fetch(`${CONFIG.BASE_URL}/save-game-result`, { // Gunakan CONFIG.BASE_URL
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                result: result,
-                distance_to_finish: distance
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error("Failed to save game result");
+    const token = getCookie("token");
+    if(token)
+    {
+        try {
+        
+            const response = await fetch(`${CONFIG.BASE_URL}/save-game-result`, { // Gunakan CONFIG.BASE_URL
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    result: result,
+                    distance_to_finish: distance
+                })
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to save game result");
+            }
+            console.log("Game result saved successfully");
+        } catch (error) {
+            console.error("Error saving game result:", error);
         }
-        console.log("Game result saved successfully");
-    } catch (error) {
-        console.error("Error saving game result:", error);
     }
 }
 
-// Fungsi untuk mengambil riwayat permainan dari server
 async function fetchGameHistory() {
     try {
-        const response = await fetch(`${CONFIG.BASE_URL}/user-game-history`); // Gunakan CONFIG.BASE_URL
+        const response = await fetch(`${CONFIG.BASE_URL}/log-action`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` 
+            },
+        })
         if (!response.ok) {
             throw new Error("Failed to fetch game history");
         }

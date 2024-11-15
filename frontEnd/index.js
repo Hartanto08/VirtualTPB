@@ -17,6 +17,48 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+function checkLoginStatus() {
+    const token = getCookie("token"); 
+    const buttonSection = document.getElementById("buttonSection");
+    const welcomeSection = document.getElementById("welcomeSection");
+    const userNameElement = document.getElementById("userName");
+
+    // Initially hide both sections
+    buttonSection.style.display = "none";
+    welcomeSection.style.display = "none";
+
+    if (token) {
+        // If logged in, fetch user data and update the UI
+        fetch(`${CONFIG.BASE_URL}/get-user-data`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Failed to fetch user data.");
+            }
+        })
+        .then(data => {
+            // Show welcome section and hide button section
+            welcomeSection.style.display = "block";
+            userNameElement.textContent = data.username || "User";
+        })
+        .catch(error => {
+            console.error("Error fetching user data:", error);
+            // Show buttons if fetching user data fails
+            buttonSection.style.display = "block";
+        });
+    } else {
+        // If not logged in, show login and register buttons
+        buttonSection.style.display = "block";
+    }
+}
+
 
 document.body.addEventListener("click", async (event) => {
     if ((event.target.tagName === "A" || event.target.tagName === "BUTTON") && event.target.classList.contains("trackable")) {
@@ -47,6 +89,8 @@ document.body.addEventListener("click", async (event) => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    checkLoginStatus();
+
     const cards = document.querySelectorAll('.feature');
     cards.forEach((card, index) => {
         setTimeout(() => {
