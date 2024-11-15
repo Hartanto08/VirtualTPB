@@ -67,17 +67,30 @@ app.use(session({
 //     }
 // });
 
-// Middleware untuk autentikasi sesi
-function authenticateSession(req, res, next) {
-    if (req.session.user) {
-        console.log("User authenticated:", req.session.user);
-        next();
-    } else {
-        console.log("User not authenticated, redirecting to /login");
-        res.redirect("/login");
-    }
-}
+// // Middleware untuk autentikasi sesi
+// function authenticateJWT(req, res, next) {
+//     if (req.session.user) {
+//         console.log("User authenticated:", req.session.user);
+//         next();
+//     } else {
+//         console.log("User not authenticated, redirecting to /login");
+//         // res.redirect("/login");
+//     }
+// }
 
+const jwtSecret = process.env.JWT_SECRET || "your_jwt_secret";
+
+// Middleware to verify JWT
+function authenticateJWT(req, res, next) {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Access denied. No token provided." });
+
+    jwt.verify(token, jwtSecret, (err, user) => {
+        if (err) return res.status(403).json({ error: "Invalid token." });
+        req.user = user;
+        next();
+    });
+}
 
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
@@ -97,8 +110,8 @@ app.get("/login", (req, res) => {
 //     res.sendFile(path.join(__dirname, "..", "frontEnd", "login", "register.html"));
 // });
 
-app.get("/dashboard", authenticateSession, async (req, res) => {
-    const user_id = req.session.user.id;
+app.get("/dashboard", authenticateJWT, async (req, res) => {
+    const user_id = req.user.id;
     await saveHistory(user_id, "Akses Dashboard");
     res.sendFile(path.join(__dirname, "..", "frontEnd", "index.html"));
 });
@@ -128,9 +141,9 @@ app.post("/login", async (req, res) => {
             const storedPassword = user.password;
 
             if (password === storedPassword) {
-                req.session.user = { id: user.id, email: user.email };
+                const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, { expiresIn: '1h' });
                 await saveHistory(user.id, "Login");
-                return res.json({ message: "Login successful" });
+                return res.status(200).json({ message: "Login successful", token: token, userId: user.id });
             } else {
                 return res.status(401).json({ error: "Incorrect Password" });
             }
@@ -207,9 +220,9 @@ app.post("/register", async (req, res) => {
 //     }
 // });
 
-app.get("/history", authenticateSession, async (req, res) => {
+app.get("/history", authenticateJWT, async (req, res) => {
     try {
-        const user_id = req.session.user.id;
+        const user_id = req.user.id;
         const result = await db.query("SELECT * FROM history WHERE user_id = $1 ORDER BY timestamp DESC", [user_id]);
         res.json(result.rows);
     } catch (err) {
@@ -218,8 +231,8 @@ app.get("/history", authenticateSession, async (req, res) => {
     }
 });
 
-app.post("/log-action", authenticateSession, async (req, res) => {
-    const user_id = req.session.user.id;
+app.post("/log-action", authenticateJWT, async (req, res) => {
+    const user_id = req.user.id;
     const action = req.body.action || "Aksi yang tidak dijelaskan";
 
     try {
@@ -231,9 +244,9 @@ app.post("/log-action", authenticateSession, async (req, res) => {
     }
 });
 
-app.get("/get-user-data", authenticateSession, async (req, res) => {
+app.get("/get-user-data", authenticateJWT, async (req, res) => {
     try {
-        const userResult = await db.query("SELECT email FROM users WHERE id = $1", [req.session.user.id]);
+        const userResult = await db.query("SELECT email FROM users WHERE id = $1", [req.user.id]);
 
         if (userResult.rows.length === 0) {
             return res.status(404).json({ error: "User not found" });
@@ -246,11 +259,11 @@ app.get("/get-user-data", authenticateSession, async (req, res) => {
     }
 });
 
-app.get("/user-history", authenticateSession, async (req, res) => {
+app.get("/user-history", authenticateJWT, async (req, res) => {
     try {
         const historyResult = await db.query(
             "SELECT action, timestamp FROM history WHERE user_id = $1 ORDER BY timestamp DESC LIMIT 30", 
-            [req.session.user.id]  
+            [req.user.id]  
         );
 
         res.json(historyResult.rows);
@@ -260,7 +273,7 @@ app.get("/user-history", authenticateSession, async (req, res) => {
     }
 });
 
-app.post("/change-password", authenticateSession, async (req, res) => {
+app.post("/change-password", authenticateJWT, async (req, res) => {
     const { oldPassword, newPassword } = req.body;
 
     if (!oldPassword || !newPassword) {
@@ -268,14 +281,14 @@ app.post("/change-password", authenticateSession, async (req, res) => {
     }
 
     try {
-        const userResult = await db.query("SELECT password FROM users WHERE id = $1", [req.session.user.id]);
+        const userResult = await db.query("SELECT password FROM users WHERE id = $1", [req.user.id]);
 
         if (userResult.rows.length === 0 || userResult.rows[0].password !== oldPassword) {
             return res.status(400).json({ error: "Incorrect old password" });
         }
 
-        await db.query("UPDATE users SET password = $1 WHERE id = $2", [newPassword, req.session.user.id]);
-        await saveHistory(req.session.user.id, "Password changed");
+        await db.query("UPDATE users SET password = $1 WHERE id = $2", [newPassword, req.user.id]);
+        await saveHistory(req.user.id, "Password changed");
         
         res.json({ message: "Password successfully updated" });
     } catch (error) {
@@ -295,9 +308,9 @@ app.post("/logout", (req, res) => {
 });
 
 // Endpoint untuk menyimpan hasil permainan
-app.post("/save-game-result", authenticateSession, async (req, res) => {
+app.post("/save-game-result", authenticateJWT, async (req, res) => {
     const { result, distance_to_finish } = req.body;
-    const user_id = req.session.user.id;
+    const user_id = req.user.id;
 
     if (!result || !distance_to_finish) {
         return res.status(400).json({ error: "Result and distance to finish are required." });
@@ -313,8 +326,8 @@ app.post("/save-game-result", authenticateSession, async (req, res) => {
 });
 
 // Endpoint untuk mengambil riwayat permainan
-app.get("/user-game-history", authenticateSession, async (req, res) => {
-    const user_id = req.session.user.id;
+app.get("/user-game-history", authenticateJWT, async (req, res) => {
+    const user_id = req.user.id;
 
     try {
         const result = await db.query("SELECT result, distance_to_finish, timestamp FROM game_results WHERE user_id = $1 ORDER BY timestamp DESC LIMIT 30", [user_id]);
