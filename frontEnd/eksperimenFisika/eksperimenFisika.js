@@ -214,14 +214,14 @@ function check() {
         let newDistance = finishPosition - carPosition;
         distance = newDistance;
         document.getElementById('goalDistance').textContent = "You are " + distance + " px away from the goal.";
-        if (distance === 0) {
+        if (distance <= 0 && distance > -3) {
             showWinnerAlert("CONGRATS, YOU'VE WON THE GAME");
             let winSound = new Audio("../audio/win.mp3");
             winSound.play();
             gameSound.pause();
             audioPlay = false;
             saveGameResult("win", 0);
-        } else if (distance < 0) {
+        } else if (distance < -3) {
             showFalseAlert("YOU'VE PASS THE LINE, GAME OVER");
             let wrongSound = new Audio("../audio/wrong.mp3");
             wrongSound.play();
@@ -256,7 +256,7 @@ async function saveGameResult(result, distance) {
                     result: result,
                     distance_to_finish: distance
                 })
-            });
+            }); 
     
             if (!response.ok) {
                 throw new Error("Failed to save game result");

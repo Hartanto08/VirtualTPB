@@ -314,7 +314,7 @@ app.post("/save-game-result", authenticateJWT, async (req, res) => {
     const { result, distance_to_finish } = req.body;
     const user_id = req.user.id;
 
-    if (!result || !distance_to_finish) {
+    if (result === undefined || result === null || distance_to_finish === undefined || distance_to_finish === null) {
         return res.status(400).json({ error: "Result and distance to finish are required." });
     }
 
