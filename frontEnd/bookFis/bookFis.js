@@ -22,11 +22,8 @@ document.body.addEventListener("click", async (event) => {
                 },
                 body: JSON.stringify({ action: actionDescription })
             });
-
-            // Terlepas dari keberhasilan atau kegagalan pencatatan aksi, lanjutkan navigasi
             window.location.href = targetUrl;
-        } catch (error) {
-            // Jika ada error selama proses, tetap lanjutkan navigasi
+        } catch (error) {  
             window.location.href = targetUrl;
         }
     }

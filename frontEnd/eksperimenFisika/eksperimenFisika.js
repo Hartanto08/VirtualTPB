@@ -239,7 +239,7 @@ function stopMusic() {
     audioPlay = false;
 }
 
-// Fungsi untuk menyimpan hasil permainan
+
 async function saveGameResult(result, distance) {
     const token = getCookie("token");
     if(token)
@@ -269,6 +269,7 @@ async function saveGameResult(result, distance) {
 }
 
 async function fetchGameHistory() {
+    const token = getCookie("token");
     try {
         const response = await fetch(`${CONFIG.BASE_URL}/log-action`, {
             method: "GET",

@@ -79,64 +79,78 @@ h1 {
     border: #00ADB5 solid 1.5px;
 }
 
+.error-message {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-family: 'Raleway';
+    color: #ff4d4f;
+    font-weight: 500;
+    text-align: left;
+    background-color: transparent;
+    /* border: 1px solid #ff4d4f; */
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.error-message.show {
+    display: block; 
+}
+
 /* Media Queries for Responsiveness */
 
-/* For tablets and small devices */
 @media (max-width: 768px) {
     h1 {
-        font-size: 24px;  /* Smaller heading size for mobile/tablet */
-        letter-spacing: 10px;  /* Adjust letter spacing */
+        font-size: 24px;
+        letter-spacing: 10px;
     }
 
     .container {
-        width: 100%;  /* Ensure the container fills the screen */
-        padding: 15px;  /* Reduce padding for smaller screens */
+        width: 100%;
+        padding: 15px;
         margin-top: 5px;
         margin-bottom: 5px;
     }
 
     .card {
-        width: 90%;  /* Adjust card width for smaller screens */
-        padding: 15px;  /* Increase padding for readability */
+        width: 90%;
+        padding: 15px;
     }
 
     .submit {
-        padding: 12px 25px;  /* Slightly larger submit button for touch screens */
+        padding: 12px 25px;
     }
 
     .form-control {
-        width: 100%;  /* Make form inputs take full width */
+        width: 100%;
     }
 
-    /* Reduce padding for mobile screens */
     .card {
         padding: 15px;
     }
 }
 
-/* For small mobile devices */
 @media (max-width: 480px) {
     h1 {
-        font-size: 20px;  /* Smaller font size */
+        font-size: 20px;
         letter-spacing: 5px;
     }
 
     .container {
-        width: 95%;  /* Ensure container has a margin on small screens */
+        width: 95%;
         padding: 10px;
         margin-top: 5px;
         margin-bottom: 5px;
     }
 
     .card {
-        width: 95%;  /* Make card width responsive */
+        width: 95%;
     }
 
     .submit {
-        width: 100%;  /* Make the submit button full width */
+        width: 100%;
     }
 
     .form-control {
-        font-size: 14px;  /* Adjust font size for better readability */
+        font-size: 14px;
     }
 }

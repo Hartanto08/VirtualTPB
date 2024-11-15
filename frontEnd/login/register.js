@@ -1,31 +1,34 @@
 document.getElementById("registerForm").addEventListener("submit", async function(e) {
-    e.preventDefault();  // Prevent the default form submission
+    e.preventDefault();  
 
-    // Get the input values
     const username = document.querySelector("input[name='username']").value;
     const password = document.querySelector("input[name='password']").value;
+    const errorMessage = document.getElementById("errorMessage");
 
-    // Send the data via fetch to the backend
+    errorMessage.textContent = "";
     try {
         const response = await fetch("https://virtual-tpb-puce.vercel.app/register", {
-            method: 'POST',  // The method for form submission
+            method: 'POST',  
             headers: {
-                'Content-Type': 'application/json',  // Make sure the backend expects JSON
+                'Content-Type': 'application/json',  
             },
-            body: JSON.stringify({ username, password }),  // Send form data as JSON
+            body: JSON.stringify({ username, password }), 
         });
         console.log(response)
         if (response.ok) {
             const data = await response.json();
             console.log('Registration successful:', data);
-            // You can redirect or show a success message
-            window.location.href = "./login.html";  // Example redirect to login page
+            window.location.href = "./login.html"; 
+        } else if (response.status === 409) {
+                errorMessage.textContent = "Email already exist. Please try again."; 
         } else {
             const error = await response.json();
-            alert(`Error: ${error.message || 'Registration failed'}`);
+            // alert(`Error: ${error.message || 'Registration failed'}`);
+            errorMessage.textContent = error.message || "Registration failed.";
         }
     } catch (error) {
         console.error('Error during registration:', error);
-        alert('An error occurred while registering.');
+        // alert('An error occurred while registering.');
+        errorMessage.textContent = "An error occurred while registering.";
     }
 });

@@ -39,9 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordMessage = document.getElementById("passwordMessage");
     const historyList = document.getElementById("historyList");
     const dropdownButtons = document.querySelectorAll(".dropdownButton");
-    const logoutButton = document.getElementById("logoutButton"); // Menambahkan referensi ke tombol logout
+    const logoutButton = document.getElementById("logoutButton"); 
 
-    // Mengatur event listener untuk dropdown
     dropdownButtons.forEach(button => {
         button.addEventListener("click", () => {
             const dropdownContent = button.nextElementSibling;
@@ -49,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Fungsi untuk mengambil data pengguna
     async function fetchUserData() {
         try {
             const token = getCookie("token");
@@ -59,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const response = await fetch(`${CONFIG.BASE_URL}/get-user-data`, { // Gunakan CONFIG.BASE_URL
+            const response = await fetch(`${CONFIG.BASE_URL}/get-user-data`, { 
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -78,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Fungsi untuk mengubah password
     passwordForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         const token = getCookie("token");
@@ -104,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Fungsi untuk mengambil riwayat aktivitas
     async function fetchHistory() {
         try {
             const token = getCookie("token");
@@ -113,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const response = await fetch(`${CONFIG.BASE_URL}/user-history`, { // Gunakan CONFIG.BASE_URL
+            const response = await fetch(`${CONFIG.BASE_URL}/user-history`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -126,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const historyData = await response.json();
 
-            // Clear the existing list before appending new history data
+            
             historyList.innerHTML = "";
 
             historyData.forEach((item) => {
@@ -139,15 +135,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Fungsi untuk logout
+
     async function logout() {
         try {
                 document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict";
                 document.cookie = "userId=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict";
-
-
-                // Arahkan pengguna kembali ke halaman login setelah log out
-                window.location.href = "../login/login.html"; // Sesuaikan dengan URL login Anda
+                window.location.href = "../login/login.html"; 
             
         } catch (error) {
             console.error("Error logging out:", error);
@@ -156,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     logoutButton.addEventListener("click", logout);
 
-    // Memanggil fungsi untuk mengambil data pengguna dan riwayat aktivitas
+
     fetchUserData();
     fetchHistory();
 });

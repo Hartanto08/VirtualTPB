@@ -57,7 +57,7 @@ h1 {
 }
 
 .submit {
-    margin-top: 30px;
+    margin-top: 25px;
     background-color: white;
     border-radius: 100px;
     opacity: 0.5;
@@ -83,62 +83,96 @@ h1 {
     opacity: 0.8;
 }
 
-/* Mobile and Tablet Styles */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 24px;  /* Smaller heading size for mobile/tablet */
-        letter-spacing: 10px;  /* Adjust letter spacing */
-    }
-
-    .container {
-        width: 100%;  /* Ensure the container fills the screen */
-        padding: 10px;  /* Reduce padding for smaller screens */
-        margin-top: 5px;
-        margin-bottom: 5px;
-    }
-
-    .card {
-        width: 90%;  /* Adjust card width for smaller screens */
-        padding: 15px;  /* Increase padding for readability */
-    }
-
-    .submit {
-        padding: 12px 25px;  /* Slightly larger submit button for touch screens */
-    }
-
-    .form-control {
-        width: 100%;  /* Make form inputs take full width */
-    }
-
-    /* Reduce padding for mobile screens */
-    .card {
-        padding: 15px;
-    }
+.error-message {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-family: 'Raleway';
+    color: #ff4d4f;
+    font-weight: 500;
+    text-align: left;
+    background-color: transparent;
+    /* border: 1px solid #ff4d4f; */
+    border-radius: 8px;
+    padding: 10px;
 }
 
-/* Very Small Devices (Mobile phones in portrait mode) */
-@media (max-width: 480px) {
+.error-message.show {
+    display: block; 
+}
+
+.register-link {
+    margin-top: 20px;
+}
+
+.register-link p {
+    font-size: 0.9em;
+    color: #EEEEEE;
+}
+
+.register-link a {
+    color: #00ADB5;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+    color: #007A85;
+}
+
+@media (max-width: 768px) {
     h1 {
-        font-size: 20px;  /* Smaller font size */
-        letter-spacing: 5px;
+        font-size: 24px;
+        letter-spacing: 10px;
     }
 
     .container {
-        width: 95%;  /* Ensure container has a margin on small screens */
+        width: 100%;
         padding: 10px;
         margin-top: 5px;
         margin-bottom: 5px;
     }
 
     .card {
-        width: 95%;  /* Make card width responsive */
+        width: 90%;
+        padding: 15px;
     }
 
     .submit {
-        width: 100%;  /* Make the submit button full width */
+        padding: 12px 25px;
     }
 
     .form-control {
-        font-size: 14px;  /* Adjust font size for better readability */
+        width: 100%;
+    }
+
+    .card {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 20px;
+        letter-spacing: 5px;
+    }
+
+    .container {
+        width: 95%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .card {
+        width: 95%;
+    }
+
+    .submit {
+        width: 100%;
+    }
+
+    .form-control {
+        font-size: 14px;
     }
 }

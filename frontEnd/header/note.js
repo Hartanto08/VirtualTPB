@@ -126,3 +126,39 @@ document.getElementById('saveButton').addEventListener('touchstart', () => {
     link.click();
     alert('Canvas has been saved!');
 });
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+document.body.addEventListener("click", async (event) => {
+    if ((event.target.tagName === "A" || event.target.tagName === "BUTTON") && event.target.classList.contains("trackable")) {
+        const actionDescription = event.target.getAttribute("data-description") || "Aksi tanpa deskripsi";
+
+        const token = getCookie("token");
+        if(token)
+        {
+            try {
+                const response = await fetch(`${CONFIG.BASE_URL}/log-action`, { // Gunakan CONFIG.BASE_URL
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ action: actionDescription })
+                });
+    
+                if (response.ok) {
+                    console.log("Action logged successfully");
+                } else {
+                    console.error("Failed to log action");
+                    }
+                
+            } catch (error) {
+                console.error("Error logging action:", error);
+            }
+        }
+    }
+});

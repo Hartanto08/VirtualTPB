@@ -262,7 +262,7 @@ footer {
 /* Animasi */
 @keyframes parabolicMotion {
     0% {
-        transform: translate(-10px, 10px); /* Titik awal (0,0) */
+        transform: translate(-10px, 10px); 
     }
     50% {
         transform: translate(20px, -40px); /* Kembali ke sumbu x */
@@ -301,13 +301,13 @@ footer {
 
 @keyframes moveBackAndForth {
     0% {
-        transform: translateX(0); /* Awal posisi */
+        transform: translateX(0);
     }
     50% {
-        transform: translateX(100px); /* Bergerak maju sejauh 100px */
+        transform: translateX(100px); 
     }
     100% {
-        transform: translateX(0); /* Kembali ke posisi semula */
+        transform: translateX(0);
     }
 }
 
