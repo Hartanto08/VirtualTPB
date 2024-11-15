@@ -93,9 +93,9 @@ app.get("/login", (req, res) => {
 });
 
 
-app.get("/register", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "frontEnd", "login", "register.html"));
-});
+// app.get("/register", (req, res) => {
+//     res.sendFile(path.join(__dirname, "..", "frontEnd", "login", "register.html"));
+// });
 
 app.get("/dashboard", authenticateSession, async (req, res) => {
     const user_id = req.session.user.id;

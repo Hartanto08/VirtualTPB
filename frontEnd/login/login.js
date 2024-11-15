@@ -28,7 +28,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             // Redirect to dashboard upon successful login
             window.location.href = "../index.html";
         } else {
-            // If response is not OK, handle it by showing the error
+            
             let errorMsg = 'Login failed. Please try again.';
             try {
                 const error = await response.json();

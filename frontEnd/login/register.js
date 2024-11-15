@@ -7,7 +7,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
     // Send the data via fetch to the backend
     try {
-        const response = await fetch("https://virtual-tpb-puce.vercel.app/register", {
+        const response = await fetch("https://virtual-tpb-puce.vercel.app//register", {
             method: 'POST',  // The method for form submission
             headers: {
                 'Content-Type': 'application/json',  // Make sure the backend expects JSON
