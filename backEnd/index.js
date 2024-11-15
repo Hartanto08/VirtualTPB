@@ -340,6 +340,19 @@ app.get("/user-game-history", authenticateJWT, async (req, res) => {
     }
 });
 
+app.get("/delete-history", authenticateJWT, async (req, res) => {
+    try {
+        const deleteResult = await db.query(
+            "DELETE FROM history WHERE user_id = $1", 
+            [req.user.id]  
+        );
+        res.json({ message: "History deleted successfully", deletedRows: deleteResult.rowCount });
+    } catch (error) {
+        console.error("Error deleting  user history:", error);
+        res.status(500).json({ error: "Failed to delete user history" });
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

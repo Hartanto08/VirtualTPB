@@ -135,7 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
     async function logout() {
         try {
                 document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict";
@@ -152,4 +151,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fetchUserData();
     fetchHistory();
+});
+
+async function deleteHistory() {
+    try {
+        const token = getCookie("token");
+        if (!token) {
+            console.error("User not logged in, no token found.");
+            return;
+        }
+
+        const response = await fetch(`${CONFIG.BASE_URL}/delete-history`, {
+            method: "DELETE", 
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            console.log("History deleted successfully.");
+            
+            const historyList = document.getElementById("historyList");
+            historyList.innerHTML = "";
+        } else {
+            console.error("Failed to delete history:", response.status);
+            const errorMessage = await response.text();
+            console.error("Error details:", errorMessage);
+        }
+    } catch (error) {
+        console.error("Error deleting history:", error);
+    }
+}
+
+document.getElementById("deleteHistoryButton").addEventListener("click", async () => {
+    const confirmation = confirm("Apakah Anda yakin ingin menghapus seluruh riwayat?");
+    if (!confirmation) return;
+
+    try {
+        const token = getCookie("token");
+        if (!token) {
+            alert("Anda belum login.");
+            return;
+        }
+
+        const response = await fetch(`${CONFIG.BASE_URL}/delete-history`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (response.ok) {
+            alert("Riwayat berhasil dihapus.");
+            const historyList = document.getElementById("historyList");
+            historyList.innerHTML = ""; // Clear the history list
+        } else {
+            alert("Gagal menghapus riwayat. Silakan coba lagi.");
+        }
+    } catch (error) {
+        console.error("Error deleting history:", error);
+        alert("Terjadi kesalahan saat menghapus riwayat.");
+    }
 });

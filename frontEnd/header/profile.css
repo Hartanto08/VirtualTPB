@@ -230,6 +230,31 @@ button[type="submit"]:hover {
     margin-top: 10px;
 }
 
+.deleteHistoryButton {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Raleway';
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(255, 77, 79, 0.4);
+}
+
+.deleteHistoryButton:hover {
+    background-color: #e63946;
+    transform: scale(1.05);
+}
+
+.deleteHistoryButton:active {
+    background-color: #c62828;
+    transform: scale(1);
+}
+
 #logoutButton {
     margin-top: 20px;
     padding: 10px 20px;
