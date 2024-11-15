@@ -6,6 +6,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
 import cors from 'cors';
+import jwt from "jsonwebtoken";
+
 
 
 dotenv.config();
@@ -152,7 +154,7 @@ app.post("/login", async (req, res) => {
         }
     } catch (err) {
         console.error("Error during login:", err);
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error " });
     }
 });
 
