@@ -9,7 +9,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch("http://localhost:3000/login", {
+        const response = await fetch(`${CONFIG.BASE_URL}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -26,7 +26,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             const data = await response.json();
             console.log("Login successful", data);
             // Redirect to dashboard upon successful login
-            window.location.href = "https://virtual-tpb.vercel.app/dashboard";
+            window.location.href = "../index.html";
         } else {
             // If response is not OK, handle it by showing the error
             let errorMsg = 'Login failed. Please try again.';
