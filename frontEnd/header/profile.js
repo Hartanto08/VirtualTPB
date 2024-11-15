@@ -4,11 +4,13 @@ document.body.addEventListener("click", async (event) => {
     if ((event.target.tagName === "A" || event.target.tagName === "BUTTON") && event.target.classList.contains("trackable")) {
         const actionDescription = event.target.getAttribute("data-description") || "Aksi tanpa deskripsi";
 
+        const token = getCookie("token");
         try {
             const response = await fetch(`${CONFIG.BASE_URL}/log-action`, { // Gunakan CONFIG.BASE_URL
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({ action: actionDescription })
             });
@@ -23,6 +25,12 @@ document.body.addEventListener("click", async (event) => {
         }
     }
 });
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const usernameDisplay = document.getElementById("username");
@@ -44,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fungsi untuk mengambil data pengguna
     async function fetchUserData() {
         try {
-            const token = localStorage.getItem("token");
+            const token = getCookie("token");
             if (!token) {
                 console.error("User not logged in, no token found.");
                 return;
@@ -71,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fungsi untuk mengubah password
     passwordForm.addEventListener("submit", async (event) => {
         event.preventDefault();
-        
+        const token = getCookie("token");
         const oldPassword = document.getElementById("oldPassword").value;
         const newPassword = document.getElementById("newPassword").value;
 
@@ -79,7 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch(`${CONFIG.BASE_URL}/change-password`, { // Gunakan CONFIG.BASE_URL
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({ oldPassword, newPassword })
             });
@@ -96,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fungsi untuk mengambil riwayat aktivitas
     async function fetchHistory() {
         try {
-            const token = localStorage.getItem("token");
+            const token = getCookie("token");
             if (!token) {
                 console.error("User not logged in, no token found.");
                 return;
@@ -131,22 +140,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fungsi untuk logout
     async function logout() {
         try {
-            const response = await fetch(`${CONFIG.BASE_URL}/logout`, { // Gunakan CONFIG.BASE_URL
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
+                document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict";
+                document.cookie = "userId=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict";
 
-            if (response.ok) {
-                // Hapus data di localStorage jika ada
-                localStorage.removeItem("token");
 
                 // Arahkan pengguna kembali ke halaman login setelah log out
                 window.location.href = `${CONFIG.BASE_URL}/login`; // Sesuaikan dengan URL login Anda
-            } else {
-                console.error("Failed to log out.");
-            }
+            
         } catch (error) {
             console.error("Error logging out:", error);
         }
