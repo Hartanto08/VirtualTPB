@@ -84,6 +84,13 @@ body {
     letter-spacing: 30px;
 }
 
+.buttonSec {
+    display: flex;
+    gap: 20px; /* Space between Login and Register buttons */
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px; /* Add some space between the text and buttons */
+}
 .home p{
     color: white;
     margin-top: 10px;
@@ -103,7 +110,7 @@ header {
 }
 
 header:hover{
-    opacity: 0.5;
+    opacity: 0.5; 
     transform: scale(1.02);
 }
 
