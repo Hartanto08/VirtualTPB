@@ -206,7 +206,7 @@ input[type="password"] {
 }
 
 button[type="submit"] {
-    width: 30%;
+    width: 100%;
     padding: 10px;
     background-color: #00ADB5;
     color: white;
@@ -243,6 +243,7 @@ button[type="submit"]:hover {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 4px 10px rgba(255, 77, 79, 0.4);
+    margin-bottom: 10px;
 }
 
 .deleteHistoryButton:hover {
@@ -331,7 +332,8 @@ footer {
     .dropdownButton,
     input[type="password"],
     button[type="submit"],
-    #logoutButton {
+    #logoutButton,
+    .deleteHistoryButton {
         width: 100%;
         font-size: 14px;
     }
@@ -364,7 +366,8 @@ footer {
     .dropdownButton,
     input[type="password"],
     button[type="submit"],
-    #logoutButton {
+    #logoutButton,
+    .deleteHistoryButton {
         width: 100%;
         padding: 8px;
         font-size: 12px;

@@ -388,6 +388,14 @@ footer p{
     letter-spacing: 10px;
     font-weight: 500;
 }
+
+.welcomeText{
+    margin-top: 50px;
+}
+
+#userName{
+    color: #00ADB5;
+}
 /* Animasi */
 
 @keyframes wave {

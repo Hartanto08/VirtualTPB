@@ -340,7 +340,7 @@ app.get("/user-game-history", authenticateJWT, async (req, res) => {
     }
 });
 
-app.get("/delete-history", authenticateJWT, async (req, res) => {
+app.delete("/delete-history", authenticateJWT, async (req, res) => {
     try {
         const deleteResult = await db.query(
             "DELETE FROM history WHERE user_id = $1", 
